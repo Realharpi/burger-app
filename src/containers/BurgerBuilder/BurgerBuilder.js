@@ -16,67 +16,73 @@ class BurgerBuilder extends Component {
     
     // Here are our ingredients. 
     state = {
-        ingredients: {
+        ingredMulti: {
             salad: 0,
             bacon: 0,
             cheese: 0,
             meat: 0
         },
         totalPrice: 4,
-        purchasable: false,
-        purchasing: false
+        isReady: false,                     // Whether the burger has ingredients or not.
+        checkingOut: false                  // Whether the customer is checking out.
     }
 
-    updatePurchaseState (ingredients) {
-        const sum = Object.keys( ingredients )
+    updatePurchaseState (ingredMulti) {
+        const sum = Object.keys( ingredMulti )
             .map( igKey => {
-                return ingredients[igKey];
+                return ingredMulti[igKey];
             } )
             .reduce( ( sum, el ) => {
                 return sum + el;
             }, 0 );
-        this.setState( { purchasable: sum > 0 } );
+        this.setState( { isReady: sum > 0 } );
     }
 
+    // Add ingredients to the burger.
     addIngredientHandler = ( type ) => {
-        const oldCount = this.state.ingredients[type];
+        const oldCount = this.state.ingredMulti[type];
         const updatedCount = oldCount + 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
+        const updatedIngredMulti = {
+            ...this.state.ingredMulti
         };
-        updatedIngredients[type] = updatedCount;
+        updatedIngredMulti[type] = updatedCount;
         const priceAddition = INGREDIENT_PRICES[type];
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice + priceAddition;
-        this.setState( { totalPrice: newPrice, ingredients: updatedIngredients } );
-        this.updatePurchaseState(updatedIngredients);
+        this.setState( { totalPrice: newPrice, ingredMulti: updatedIngredMulti } );
+        this.updatePurchaseState(updatedIngredMulti);
     }
 
+
+    // Remove ingredients from the burger.
     removeIngredientHandler = ( type ) => {
-        const oldCount = this.state.ingredients[type];
+        const oldCount = this.state.ingredMulti[type];
         if ( oldCount <= 0 ) {
             return;
         }
         const updatedCount = oldCount - 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
+        const updatedIngredMulti = {
+            ...this.state.ingredMulti
         };
-        updatedIngredients[type] = updatedCount;
+        updatedIngredMulti[type] = updatedCount;
         const priceDeduction = INGREDIENT_PRICES[type];
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice - priceDeduction;
-        this.setState( { totalPrice: newPrice, ingredients: updatedIngredients } );
-        this.updatePurchaseState(updatedIngredients);
+        this.setState( { totalPrice: newPrice, ingredMulti: updatedIngredMulti } );
+        this.updatePurchaseState(updatedIngredMulti);
     }
 
+    // Customer is going to purchase the burger - When this function is called.
     purchaseHandler = () => {
-        this.setState({purchasing: true});
+        this.setState({checkingOut: true});
     }
 
+    // Cancel the checkout process - When this function is called.
     purchaseCancelHandler = () => {
-        this.setState({purchasing: false});
+        this.setState({checkingOut: false});
     }
 
+    // Continue to checkout  - When this function is called.
     purchaseContinueHandler = () => {
         alert('You continue!');
     }
@@ -85,7 +91,7 @@ class BurgerBuilder extends Component {
 
         // Disabling the button.
         const disabledInfo = {
-            ...this.state.ingredients
+            ...this.state.ingredMulti
         };
         for ( let key in disabledInfo ) {
             disabledInfo[key] = disabledInfo[key] <= 0      // disabledInfo[key] is the count of the ingredients. Like how many cheese or salad.
@@ -93,19 +99,19 @@ class BurgerBuilder extends Component {
 
         return (
             <Auxx>
-                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+                <Modal show={this.state.checkingOut} modalClosed={this.purchaseCancelHandler}>
                     <OrderSummary 
-                        ingredients={this.state.ingredients}
+                        ingredMulti={this.state.ingredMulti}
                         price={this.state.totalPrice}
                         purchaseCancelled={this.purchaseCancelHandler}
                         purchaseContinued={this.purchaseContinueHandler} />
                 </Modal>
-                <Burger ingredients={this.state.ingredients} />             {/* We are giving the ingredients as props here. */}
+                <Burger ingredMulti={this.state.ingredMulti} />             {/* We are giving the ingredients as props here. */}
                 <BuildControls
                     ingredientAdded={this.addIngredientHandler}             // We are passing "addIngredientHandler" as a prop to child "BuilderControls".
                     ingredientRemoved={this.removeIngredientHandler}
                     disabled={disabledInfo}                                 // Disable button
-                    purchasable={this.state.purchasable}                    // We can check whether we can buy the burger or not.
+                    isReady={this.state.isReady}                            // We can check whether the burger ready to buy.
                     ordered={this.purchaseHandler}
                     price={this.state.totalPrice}                           // Price Added
                 />

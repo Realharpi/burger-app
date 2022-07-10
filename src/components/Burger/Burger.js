@@ -5,9 +5,9 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 const burger = ( props ) => {
 
     // Here are our ingredients. Which is taken from "BugerBuilder.js" as props.
-    let transformedIngredients = Object.keys( props.ingredients )
+    let transformedIngredients = Object.keys( props.ingredMulti )
         .map( igKey => {
-            return [...Array( props.ingredients[igKey] )].map( ( _, i ) => {
+            return [...Array( props.ingredMulti[igKey] )].map( ( _, i ) => {
                 return <BurgerIngredient key={igKey + i} type={igKey} />;
             } );
         } )

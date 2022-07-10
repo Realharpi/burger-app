@@ -23,9 +23,9 @@ const buildControls = (props) => (
                 disabled={props.disabled[ctrl.type]} />                    // Disabled the button.
         ))}
         <button 
-            className={classes.OrderButton}
-            disabled={!props.purchasable}
-            onClick={props.ordered}>ORDER NOW</button>
+            className={classes.OrderButton}                     // Css is applied.
+            disabled={!props.isReady}                           // If burger isn't ready, this button will be disabled.
+            onClick={props.ordered}>ORDER NOW</button>         
     </div>
 );
 
