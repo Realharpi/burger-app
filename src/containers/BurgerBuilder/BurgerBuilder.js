@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import Auxx from '../../hoc/Auxx';
-import Burger from '../../components/Burger/Burger';
-import BuildControls from '../../components/Burger/BuildControls/BuildControls';
-import Modal from '../../components/UI/Modal/Modal';
-import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import React, { Component } from 'react'
+import Auxx from '../../hoc/Auxx'
+import Burger from '../../components/Burger/Burger'
+import BuildControls from '../../components/Burger/BuildControls/BuildControls'
+import Modal from '../../components/UI/Modal/Modal'
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
     cheese: 0.4,
     meat: 1.3,
     bacon: 0.7
-};
+}
 
 class BurgerBuilder extends Component {
     
@@ -30,61 +30,61 @@ class BurgerBuilder extends Component {
     updatePurchaseState (ingredMulti) {
         const sum = Object.keys( ingredMulti )
             .map( igKey => {
-                return ingredMulti[igKey];
+                return ingredMulti[igKey]
             } )
             .reduce( ( sum, el ) => {
-                return sum + el;
-            }, 0 );
-        this.setState( { isReady: sum > 0 } );
+                return sum + el
+            }, 0 )
+        this.setState( { isReady: sum > 0 } )
     }
 
     // Add ingredients to the burger.
     addIngredientHandler = ( type ) => {
-        const oldCount = this.state.ingredMulti[type];
-        const updatedCount = oldCount + 1;
+        const oldCount = this.state.ingredMulti[type]
+        const updatedCount = oldCount + 1
         const updatedIngredMulti = {
             ...this.state.ingredMulti
-        };
-        updatedIngredMulti[type] = updatedCount;
-        const priceAddition = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice + priceAddition;
-        this.setState( { totalPrice: newPrice, ingredMulti: updatedIngredMulti } );
-        this.updatePurchaseState(updatedIngredMulti);
+        }
+        updatedIngredMulti[type] = updatedCount
+        const priceAddition = INGREDIENT_PRICES[type]
+        const oldPrice = this.state.totalPrice
+        const newPrice = oldPrice + priceAddition
+        this.setState( { totalPrice: newPrice, ingredMulti: updatedIngredMulti } )
+        this.updatePurchaseState(updatedIngredMulti)
     }
 
 
     // Remove ingredients from the burger.
     removeIngredientHandler = ( type ) => {
-        const oldCount = this.state.ingredMulti[type];
+        const oldCount = this.state.ingredMulti[type]
         if ( oldCount <= 0 ) {
             return;
         }
-        const updatedCount = oldCount - 1;
+        const updatedCount = oldCount - 1
         const updatedIngredMulti = {
             ...this.state.ingredMulti
         };
-        updatedIngredMulti[type] = updatedCount;
-        const priceDeduction = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice - priceDeduction;
-        this.setState( { totalPrice: newPrice, ingredMulti: updatedIngredMulti } );
-        this.updatePurchaseState(updatedIngredMulti);
+        updatedIngredMulti[type] = updatedCount
+        const priceDeduction = INGREDIENT_PRICES[type]
+        const oldPrice = this.state.totalPrice
+        const newPrice = oldPrice - priceDeduction
+        this.setState( { totalPrice: newPrice, ingredMulti: updatedIngredMulti } )
+        this.updatePurchaseState(updatedIngredMulti)
     }
 
     // Customer is going to purchase the burger - When this function is called.
     purchaseHandler = () => {
-        this.setState({checkingOut: true});
+        this.setState({checkingOut: true})
     }
 
     // Cancel the checkout process - When this function is called.
     purchaseCancelHandler = () => {
-        this.setState({checkingOut: false});
+        this.setState({checkingOut: false})
     }
 
     // Continue to checkout  - When this function is called.
     purchaseContinueHandler = () => {
-        alert('You continue!');
+        alert('You continue!')
     }
 
     render () {
@@ -92,7 +92,7 @@ class BurgerBuilder extends Component {
         // Disabling the button.
         const disabledInfo = {
             ...this.state.ingredMulti
-        };
+        }
         for ( let key in disabledInfo ) {
             disabledInfo[key] = disabledInfo[key] <= 0      // disabledInfo[key] is the count of the ingredients. Like how many cheese or salad.
         }
@@ -116,8 +116,8 @@ class BurgerBuilder extends Component {
                     price={this.state.totalPrice}                           // Price Added
                 />
             </Auxx>
-        );
+        )
     }
 }
 
-export default BurgerBuilder;
+export default BurgerBuilder
